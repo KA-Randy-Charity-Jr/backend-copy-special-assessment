@@ -18,16 +18,15 @@ import argparse
 
 
 def get_special_paths(dirname):
-    
+
     list_files = []
     files = os.listdir(dirname)
     for file in files:
         match = re.search(r'__(\w+)__', file)
         if match:
-          list_files.append(os.path.abspath(os.path.join(dirname, file)))
-          
-    return list_files
+            list_files.append(os.path.abspath(os.path.join(dirname, file)))
 
+    return list_files
 
 
 def copy_to(path, files):
@@ -37,21 +36,15 @@ def copy_to(path, files):
         print("This path exists")
     for file in files:
         shutil.copy(file, path)
-      
 
 
-def zip_to(path, dest_zip):
+def zip_to(path_list, dest_zip):
     # your code here
-    paths = list(path)
-    command = "zip -j {} {}".format(dest_zip, ' '.join(paths))
-    print("Command I am going to do: ")
-    print(command)
-    os.system(command)
-    
-
-
-
-
+    cmd = ['zip', '-j', dest_zip]
+    cmd.extend(path_list)
+    print("command Im going to do!")
+    print(' '.join(cmd))
+    subprocess.check_output(cmd)
 
 
 def main(args):
@@ -70,9 +63,6 @@ def main(args):
         zip_to(all_paths, ns.tozip)
     if not ns.todir and not ns.tozip:
         print('\n'.join(all_paths))
-        
-    
-
 
 
 if __name__ == "__main__":
